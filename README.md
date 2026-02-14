@@ -75,7 +75,7 @@ This project builds an **Sale Price Prediction System** that:
 
 ## 📁 Project Structure
 ```
-MyDlyWork_Task3/
+MYDAILYWORK_TASK4/
 │
 ├── data/
 │   ├── raw/                    # Original datasets (not tracked)
@@ -118,7 +118,7 @@ MyDlyWork_Task3/
 ### Setup Instructions
 ```bash
 # 1. Clone the repository
-git clone https://github.com/YOUR-USERNAME/MyDlyWork_Task3.git
+git clone https://github.com/YOUR-USERNAME/MYDAILYWORK_TASK4.git
 cd MyDlyWork_Task3
 
 # 2. Create virtual environment (recommended)
