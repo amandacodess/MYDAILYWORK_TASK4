@@ -47,153 +47,60 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for baby pink and white gradient theme
+# Custom CSS for better UI
+# Custom CSS for better UI
 st.markdown("""
     <style>
-    /* Baby Pink to White Gradient Background */
     .main {
-        background: linear-gradient(to bottom, #FFE5E5 0%, #FFF0F5 20%, #FFFFFF 40%, #FFF0F5 60%, #FFE5E5 80%, #FFFFFF 100%);
-        background-attachment: fixed;
         padding: 2rem;
     }
-    
-    /* Sidebar - matching gradient */
-    [data-testid="stSidebar"] {
-        background: linear-gradient(to bottom, #FFE5E5 0%, #FFFFFF 100%);
+    .stAlert {
+        padding: 1rem;
+        border-radius: 0.5rem;
     }
-    
-    /* Keep all text BLACK */
-    * {
-        color: #000000 !important;
-    }
-    
-    /* Headers - darker for contrast */
     h1 {
-        color: #2C3E50 !important;
-        font-weight: 700 !important;
+        color: #1F77B4;
+        font-weight: 700;
     }
-    
     h2, h3 {
-        color: #2C3E50 !important;
-        font-weight: 600 !important;
+        color: #2C3E50;
     }
-    
-    /* Metric cards with pink gradient */
     .metric-card {
-        background: linear-gradient(135deg, #FF69B4 0%, #FFB6C1 100%);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         padding: 1.5rem;
-        border-radius: 15px;
-        color: white !important;
+        border-radius: 10px;
+        color: white;
         text-align: center;
         margin: 1rem 0;
-        box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
     }
-    
-    .metric-card * {
-        color: white !important;
-    }
-    
-    /* Improvement badge */
     .improvement-badge {
-        background: linear-gradient(135deg, #FF1493 0%, #FF69B4 100%);
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
         padding: 0.5rem 1rem;
         border-radius: 20px;
-        color: white !important;
+        color: white;
         font-weight: bold;
         display: inline-block;
         margin: 0.5rem 0;
     }
     
-    .improvement-badge * {
-        color: white !important;
-    }
-    
-    /* Buttons - pink gradient */
-    .stButton > button {
-        background: linear-gradient(135deg, #FF69B4 0%, #FFB6C1 100%);
-        color: white !important;
-        border: none;
-        border-radius: 10px;
-        padding: 0.5rem 2rem;
-        font-weight: 600;
-        box-shadow: 0 4px 10px rgba(255, 105, 180, 0.3);
-    }
-    
-    .stButton > button:hover {
-        background: linear-gradient(135deg, #FF1493 0%, #FF69B4 100%);
-        transform: translateY(-2px);
-    }
-    
-    /* Input fields - light pink background */
-    .stTextInput > div > div > input,
-    .stNumberInput > div > div > input,
-    .stSelectbox > div > div > select {
-        background-color: rgba(255, 240, 245, 0.5);
-        color: #000000 !important;
-        border: 2px solid #FFB6C1;
-        border-radius: 8px;
-    }
-    
-    /* Tabs */
-    .stTabs [data-baseweb="tab-list"] {
-        background-color: rgba(255, 240, 245, 0.3);
-        border-radius: 10px;
-        padding: 10px;
-    }
-    
-    .stTabs [data-baseweb="tab"] {
-        background-color: white;
-        color: #000000 !important;
-        border-radius: 8px;
-        border: 2px solid #FFB6C1;
-    }
-    
-    .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #FF69B4 0%, #FFB6C1 100%);
-        color: white !important;
-    }
-    
-    .stTabs [aria-selected="true"] * {
-        color: white !important;
-    }
-    
-    /* Metric values - pink color */
-    [data-testid="stMetricValue"] {
-        color: #FF1493 !important;
-        font-weight: 700 !important;
-    }
-    
-    /* Alert boxes - light pink background */
-    .stAlert {
-        background-color: rgba(255, 240, 245, 0.6) !important;
-        border-left: 4px solid #FF69B4 !important;
-        border-radius: 8px;
-    }
-    
-    /* Images - subtle shadow */
+    /* Fixed image sizing */
     .stImage {
-        border-radius: 10px;
-        box-shadow: 0 4px 15px rgba(255, 105, 180, 0.2);
+        max-width: 100%;
+        height: auto;
     }
     
-    /* Links - pink */
-    a {
-        color: #FF1493 !important;
-        font-weight: 600;
+    /* Center images */
+    .stImage > img {
+        display: block;
+        margin: 0 auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
     
-    /* Divider - pink gradient */
-    hr {
-        border: none;
-        height: 2px;
-        background: linear-gradient(90deg, transparent 0%, #FFB6C1 50%, transparent 100%);
-        margin: 2rem 0;
-    }
-    
-    /* Dataframes */
-    .stDataFrame {
-        background-color: white;
-        border-radius: 10px;
+    /* Specific sizing for large images */
+    .stImage[data-testid="stImage"] img {
+        max-height: 600px;
+        object-fit: contain;
     }
     </style>
 """, unsafe_allow_html=True)
