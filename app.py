@@ -47,62 +47,236 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for better UI
-# Custom CSS for better UI
+# Custom CSS for baby pink-white gradient background with black text
 st.markdown("""
-    <style>
-    .main {
-        padding: 2rem;
+<style>
+    /* Main background gradient - Baby Pink to White */
+    .stApp {
+        background: linear-gradient(135deg, #FFE5E5 0%, #FFFFFF 100%);
     }
+    
+    /* All text black */
+    .stApp, .stMarkdown, .stText, p, span, label, h1, h2, h3 {
+        color: #000000 !important;
+    }
+    
+    /* Sidebar styling - Pink gradient */
+    [data-testid="stSidebar"] {
+        background: linear-gradient(135deg, #FFE5E5 0%, #FFF0F5 100%);
+    }
+    
+    [data-testid="stSidebar"] * {
+        color: #000000 !important;
+    }
+    
+    /* Pink Gradient buttons */
+    .stButton > button {
+        background: linear-gradient(135deg, #FF69B4 0%, #FFB6C1 100%) !important;
+        color: white !important;
+        border: 2px solid rgba(255, 255, 255, 0.3) !important;
+        font-weight: bold !important;
+        border-radius: 10px !important;
+        padding: 12px 30px !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 4px 15px rgba(255, 105, 180, 0.5) !important;
+        font-size: 16px !important;
+    }
+    
+    .stButton > button:hover {
+        background: linear-gradient(135deg, #FF1493 0%, #FF69B4 100%) !important;
+        transform: scale(1.05);
+        box-shadow: 0 6px 25px rgba(255, 20, 147, 0.8) !important;
+        border: 2px solid rgba(255, 255, 255, 0.6) !important;
+    }
+    
+    /* Pink slider */
+    .stSlider > div > div > div {
+        background-color: #FF69B4 !important;
+    }
+    
+    .stSlider > div > div > div > div {
+        background-color: #FF69B4 !important;
+    }
+    
+    /* Slider thumb */
+    .stSlider [role="slider"] {
+        background-color: #FF1493 !important;
+        border: 2px solid #FF1493 !important;
+    }
+    
+    /* Slider track */
+    .stSlider > div > div > div {
+        background: rgba(255, 182, 193, 0.3) !important;
+    }
+    
+    /* Input boxes */
+    .stSelectbox > div > div, .stNumberInput > div > div > input {
+        background-color: rgba(255, 240, 245, 0.5) !important;
+        color: #000000 !important;
+        border: 1px solid rgba(255, 182, 193, 0.5) !important;
+    }
+    
+    /* Dropdown text */
+    .stSelectbox [data-baseweb="select"] > div {
+        color: #000000 !important;
+    }
+    
+    /* Number input */
+    .stNumberInput input {
+        color: #000000 !important;
+    }
+    
+    /* Metrics */
+    [data-testid="stMetricValue"] {
+        color: #FF1493 !important;
+        font-weight: 700 !important;
+    }
+    
+    [data-testid="stMetricLabel"] {
+        color: #000000 !important;
+    }
+    
+    /* Info boxes */
     .stAlert {
-        padding: 1rem;
-        border-radius: 0.5rem;
+        background-color: rgba(255, 240, 245, 0.6) !important;
+        border: 1px solid rgba(255, 182, 193, 0.5) !important;
+        color: #000000 !important;
     }
+    
+    .stAlert * {
+        color: #000000 !important;
+    }
+    
+    /* Success/Error boxes */
+    .stSuccess, .stError {
+        background-color: rgba(255, 240, 245, 0.6) !important;
+        color: #000000 !important;
+    }
+    
+    .stSuccess * {
+        color: #000000 !important;
+    }
+    
+    .stError * {
+        color: #000000 !important;
+    }
+    
+    /* Expander */
+    .streamlit-expanderHeader {
+        background-color: rgba(255, 240, 245, 0.5) !important;
+        color: #000000 !important;
+    }
+    
+    .streamlit-expanderContent {
+        background-color: rgba(255, 255, 255, 0.8) !important;
+    }
+    
+    /* Headers */
+    h1, h2, h3 {
+        color: #2C3E50 !important;
+        text-shadow: 2px 2px 4px rgba(255, 192, 203, 0.3);
+        font-weight: 700 !important;
+    }
+    
     h1 {
-        color: #1F77B4;
-        font-weight: 700;
+        color: #C71585 !important;
     }
-    h2, h3 {
-        color: #2C3E50;
+    
+    /* Divider */
+    hr {
+        border: none;
+        height: 2px;
+        background: linear-gradient(90deg, transparent 0%, #FFB6C1 50%, transparent 100%);
+        margin: 2rem 0;
     }
-    .metric-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 1.5rem;
+    
+    /* Column borders */
+    [data-testid="column"] {
+        border-right: 1px solid rgba(255, 182, 193, 0.2);
+        padding: 10px;
+    }
+    
+    /* Tabs */
+    .stTabs [data-baseweb="tab-list"] {
+        background-color: rgba(255, 240, 245, 0.3);
         border-radius: 10px;
-        color: white;
-        text-align: center;
-        margin: 1rem 0;
+        padding: 10px;
     }
+    
+    .stTabs [data-baseweb="tab"] {
+        background-color: white;
+        color: #000000 !important;
+        border-radius: 8px;
+        border: 2px solid #FFB6C1;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, #FF69B4 0%, #FFB6C1 100%);
+        color: white !important;
+    }
+    
+    .stTabs [aria-selected="true"] * {
+        color: white !important;
+    }
+    
+    /* Metric cards */
+    .metric-card {
+        background: linear-gradient(135deg, #FF69B4 0%, #FFB6C1 100%);
+        padding: 1.5rem;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+    }
+    
+    .metric-card, .metric-card * {
+        color: white !important;
+    }
+    
+    /* Improvement badge */
     .improvement-badge {
-        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        background: linear-gradient(135deg, #FF1493 0%, #FF69B4 100%);
         padding: 0.5rem 1rem;
         border-radius: 20px;
-        color: white;
         font-weight: bold;
         display: inline-block;
         margin: 0.5rem 0;
     }
     
-    /* Fixed image sizing */
+    .improvement-badge, .improvement-badge * {
+        color: white !important;
+    }
+    
+    /* Images */
     .stImage {
-        max-width: 100%;
-        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(255, 105, 180, 0.2);
     }
     
-    /* Center images */
-    .stImage > img {
-        display: block;
-        margin: 0 auto;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Links */
+    a {
+        color: #FF1493 !important;
+        font-weight: 600;
     }
     
-    /* Specific sizing for large images */
-    .stImage[data-testid="stImage"] img {
-        max-height: 600px;
-        object-fit: contain;
+    a:hover {
+        color: #C71585 !important;
     }
-    </style>
+    
+    /* Dataframes */
+    .stDataFrame {
+        background-color: white;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 182, 193, 0.3);
+    }
+    
+    /* Code blocks */
+    code {
+        background-color: rgba(255, 240, 245, 0.6) !important;
+        color: #C71585 !important;
+        padding: 2px 6px;
+        border-radius: 4px;
+    }
+</style>
 """, unsafe_allow_html=True)
 
 # Load model and preprocessors
