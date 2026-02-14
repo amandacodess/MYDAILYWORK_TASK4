@@ -48,59 +48,288 @@ st.set_page_config(
 )
 
 # Custom CSS for better UI
-# Custom CSS for better UI
 st.markdown("""
     <style>
+    /* Main background gradient - Baby Pink to White */
     .main {
+        background: linear-gradient(135deg, #FFE5E5 0%, #FFF0F5 25%, #FFFFFF 50%, #FFF0F5 75%, #FFE5E5 100%);
         padding: 2rem;
     }
-    .stAlert {
-        padding: 1rem;
-        border-radius: 0.5rem;
+    
+    /* Sidebar gradient */
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #FFE5E5 0%, #FFF5F8 50%, #FFFFFF 100%);
     }
+    
+    /* Sidebar text color */
+    [data-testid="stSidebar"] * {
+        color: #000000 !important;
+    }
+    
+    /* Main content text */
+    .main * {
+        color: #000000 !important;
+    }
+    
+    /* Headers */
+    h1, h2, h3, h4, h5, h6 {
+        color: #2C3E50 !important;
+        font-weight: 700 !important;
+    }
+    
     h1 {
-        color: #1F77B4;
-        font-weight: 700;
+        color: #C71585 !important;
+        text-shadow: 2px 2px 4px rgba(255, 192, 203, 0.3);
     }
-    h2, h3 {
-        color: #2C3E50;
-    }
+    
+    /* Metric cards with pink gradient */
     .metric-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #FF69B4 0%, #FFB6C1 100%);
         padding: 1.5rem;
-        border-radius: 10px;
-        color: white;
+        border-radius: 15px;
+        color: white !important;
         text-align: center;
         margin: 1rem 0;
+        box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
     }
+    
+    .metric-card * {
+        color: white !important;
+    }
+    
+    /* Improvement badge */
     .improvement-badge {
-        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        background: linear-gradient(135deg, #FF1493 0%, #FF69B4 100%);
         padding: 0.5rem 1rem;
         border-radius: 20px;
-        color: white;
+        color: white !important;
         font-weight: bold;
         display: inline-block;
         margin: 0.5rem 0;
+        box-shadow: 0 2px 10px rgba(255, 20, 147, 0.3);
     }
     
-    /* Fixed image sizing */
-    .stImage {
-        max-width: 100%;
-        height: auto;
+    .improvement-badge * {
+        color: white !important;
     }
     
-    /* Center images */
-    .stImage > img {
-        display: block;
-        margin: 0 auto;
+    /* Buttons */
+    .stButton > button {
+        background: linear-gradient(135deg, #FF69B4 0%, #FFB6C1 100%);
+        color: white !important;
+        border: none;
+        border-radius: 10px;
+        padding: 0.5rem 2rem;
+        font-weight: 600;
+        box-shadow: 0 4px 10px rgba(255, 105, 180, 0.3);
+        transition: all 0.3s ease;
+    }
+    
+    .stButton > button:hover {
+        background: linear-gradient(135deg, #FF1493 0%, #FF69B4 100%);
+        box-shadow: 0 6px 15px rgba(255, 20, 147, 0.4);
+        transform: translateY(-2px);
+    }
+    
+    /* Input fields */
+    .stTextInput > div > div > input,
+    .stNumberInput > div > div > input,
+    .stSelectbox > div > div > select {
+        background-color: #FFF5F8;
+        color: #000000 !important;
+        border: 2px solid #FFB6C1;
         border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
     
-    /* Specific sizing for large images */
-    .stImage[data-testid="stImage"] img {
-        max-height: 600px;
-        object-fit: contain;
+    .stTextInput > div > div > input:focus,
+    .stNumberInput > div > div > input:focus,
+    .stSelectbox > div > div > select:focus {
+        border-color: #FF69B4;
+        box-shadow: 0 0 10px rgba(255, 105, 180, 0.3);
+    }
+    
+    /* Tabs */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+        background: linear-gradient(90deg, #FFE5E5 0%, #FFF0F5 100%);
+        padding: 10px;
+        border-radius: 10px;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        background-color: white;
+        color: #000000 !important;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 600;
+        border: 2px solid #FFB6C1;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, #FF69B4 0%, #FFB6C1 100%);
+        color: white !important;
+        border-color: #FF1493;
+    }
+    
+    /* Metrics (st.metric) */
+    [data-testid="stMetricValue"] {
+        color: #C71585 !important;
+        font-size: 2rem !important;
+        font-weight: 700 !important;
+    }
+    
+    [data-testid="stMetricLabel"] {
+        color: #2C3E50 !important;
+        font-weight: 600 !important;
+    }
+    
+    [data-testid="stMetricDelta"] {
+        color: #000000 !important;
+    }
+    
+    /* Info/Success/Warning boxes */
+    .stAlert {
+        background-color: #FFF5F8 !important;
+        color: #000000 !important;
+        border-left: 4px solid #FF69B4 !important;
+        border-radius: 8px;
+        padding: 1rem;
+    }
+    
+    .stAlert [data-testid="stMarkdownContainer"] * {
+        color: #000000 !important;
+    }
+    
+    /* Success boxes */
+    .stSuccess {
+        background-color: #E8F5E9 !important;
+        border-left-color: #4CAF50 !important;
+    }
+    
+    /* Warning boxes */
+    .stWarning {
+        background-color: #FFF3E0 !important;
+        border-left-color: #FF9800 !important;
+    }
+    
+    /* Error boxes */
+    .stError {
+        background-color: #FFEBEE !important;
+        border-left-color: #F44336 !important;
+    }
+    
+    /* Dataframes */
+    .stDataFrame {
+        background-color: white;
+        border-radius: 10px;
+        border: 2px solid #FFB6C1;
+    }
+    
+    /* Images */
+    .stImage {
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(255, 105, 180, 0.2);
+        margin: 1rem 0;
+    }
+    
+    /* Plotly charts */
+    .js-plotly-plot {
+        border-radius: 10px;
+        background-color: white;
+        padding: 1rem;
+        box-shadow: 0 4px 15px rgba(255, 105, 180, 0.15);
+    }
+    
+    /* Footer */
+    footer {
+        background: linear-gradient(90deg, #FFE5E5 0%, #FFF0F5 100%);
+        color: #000000 !important;
+        padding: 1rem;
+        border-radius: 10px;
+        margin-top: 2rem;
+    }
+    
+    /* Markdown links */
+    a {
+        color: #FF1493 !important;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    
+    a:hover {
+        color: #C71585 !important;
+        text-decoration: underline;
+    }
+    
+    /* Divider lines */
+    hr {
+        border: none;
+        height: 2px;
+        background: linear-gradient(90deg, #FFE5E5 0%, #FF69B4 50%, #FFE5E5 100%);
+        margin: 2rem 0;
+    }
+    
+    /* Code blocks */
+    code {
+        background-color: #FFF0F5 !important;
+        color: #C71585 !important;
+        padding: 2px 6px;
+        border-radius: 4px;
+        border: 1px solid #FFB6C1;
+    }
+    
+    /* Expander */
+    .streamlit-expanderHeader {
+        background-color: #FFF5F8 !important;
+        color: #000000 !important;
+        border-radius: 8px;
+        border: 2px solid #FFB6C1;
+    }
+    
+    /* Spinner */
+    .stSpinner > div {
+        border-top-color: #FF69B4 !important;
+    }
+    
+    /* Progress bar */
+    .stProgress > div > div > div {
+        background-color: #FF69B4 !important;
+    }
+    
+    /* Slider */
+    .stSlider [data-baseweb="slider"] {
+        background: linear-gradient(90deg, #FFE5E5 0%, #FF69B4 100%);
+    }
+    
+    /* Radio buttons and checkboxes */
+    .stRadio label, .stCheckbox label {
+        color: #000000 !important;
+    }
+    
+    /* File uploader */
+    [data-testid="stFileUploader"] {
+        background-color: #FFF5F8;
+        border: 2px dashed #FFB6C1;
+        border-radius: 10px;
+    }
+    
+    /* Ensure all text is readable */
+    p, span, label, div {
+        color: #000000 !important;
+    }
+    
+    /* White text exceptions (for colored backgrounds) */
+    .metric-card p,
+    .metric-card span,
+    .metric-card div,
+    .metric-card h1,
+    .metric-card h2,
+    .metric-card h3,
+    .improvement-badge p,
+    .improvement-badge span,
+    .stButton > button,
+    .stTabs [aria-selected="true"] {
+        color: white !important;
     }
     </style>
 """, unsafe_allow_html=True)
