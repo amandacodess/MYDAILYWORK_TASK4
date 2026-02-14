@@ -11,3 +11,28 @@ ENV/
 *.egg-info/
 dist/
 build/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints
+
+# Data (don't push large datasets)
+data/raw/*.csv
+
+# Models (can be large files)
+models/*.pkl
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Kaggle
+.kaggle/
+"@ | Out-File -FilePath .gitignore -Encoding utf8
