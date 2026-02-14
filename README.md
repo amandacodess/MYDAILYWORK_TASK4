@@ -119,7 +119,7 @@ MYDAILYWORK_TASK4/
 ```bash
 # 1. Clone the repository
 git clone https://github.com/YOUR-USERNAME/MYDAILYWORK_TASK4.git
-cd MyDlyWork_Task3
+cd MYDAILYWORK_TASK4
 
 # 2. Create virtual environment (recommended)
 python -m venv venv
