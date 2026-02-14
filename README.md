@@ -160,9 +160,6 @@ pip install -r requirements.txt
 ```
 
 ## 🌐 Live Demo
-
-< align="center">
-
 ### 🎯 **[Try the Live Application →](https://mydailywork-task4.streamlit.app/)**
 
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://mydailywork-task4.streamlit.app/)
