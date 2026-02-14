@@ -39,6 +39,15 @@ st.markdown("""
         text-align: center;
         margin: 1rem 0;
     }
+    .improvement-badge {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        color: white;
+        font-weight: bold;
+        display: inline-block;
+        margin: 0.5rem 0;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -47,19 +56,36 @@ st.markdown("""
 def load_artifacts():
     """Load trained model and preprocessing objects"""
     try:
-        with open('models/best_model.pkl', 'rb') as f:
-            model = pickle.load(f)
+        # Try to load tuned model first
+        tuned_model_path = Path('models/tuned_xgboost_model.pkl')
+        if tuned_model_path.exists():
+            with open(tuned_model_path, 'rb') as f:
+                model = pickle.load(f)
+            
+            with open('models/tuned_model_metadata.pkl', 'rb') as f:
+                metadata = pickle.load(f)
+            
+            model_type = "tuned"
+            st.sidebar.success("🎯 Using Hyperparameter-Tuned Model")
+        else:
+            # Fallback to baseline model
+            with open('models/best_model.pkl', 'rb') as f:
+                model = pickle.load(f)
+            
+            with open('models/model_metadata.pkl', 'rb') as f:
+                metadata = pickle.load(f)
+            
+            model_type = "baseline"
+            st.sidebar.info("📊 Using Baseline Model")
         
+        # Load preprocessors
         with open('models/scaler.pkl', 'rb') as f:
             scaler = pickle.load(f)
         
         with open('models/label_encoders.pkl', 'rb') as f:
             encoders = pickle.load(f)
         
-        with open('models/model_metadata.pkl', 'rb') as f:
-            metadata = pickle.load(f)
-        
-        return model, scaler, encoders, metadata
+        return model, scaler, encoders, metadata, model_type
     
     except FileNotFoundError as e:
         st.error("⚠️ Model files not found! Please train the model first.")
@@ -68,11 +94,12 @@ def load_artifacts():
         1. Open Jupyter Notebook: `jupyter notebook`
         2. Run `notebooks/01_eda.ipynb` completely
         3. Run `notebooks/02_modeling.ipynb` completely
-        4. This will create the required model files in `models/` directory
+        4. (Optional) Run `notebooks/03_advanced_features.ipynb` for tuned model
+        5. This will create the required model files in `models/` directory
         """)
         st.stop()
 
-model, scaler, encoders, metadata = load_artifacts()
+model, scaler, encoders, metadata, model_type = load_artifacts()
 
 # Load sample data to get feature info
 @st.cache_data
@@ -90,16 +117,48 @@ sample_data = load_sample_data()
 # ===== HEADER =====
 st.title("🚗 Car Sales Price Prediction System")
 st.markdown("### Machine Learning Vehicle Pricing Tool")
+
+# Show improvement badge if using tuned model
+if model_type == "tuned" and 'baseline_metrics' in metadata:
+    baseline_r2 = metadata['baseline_metrics']['test_r2']
+    tuned_r2 = metadata['metrics']['test_r2']
+    improvement = ((tuned_r2 - baseline_r2) / baseline_r2) * 100
+    
+    st.markdown(f"""
+    <div class="improvement-badge">
+        ⚡ Performance Improved by {improvement:.2f}% through Hyperparameter Tuning
+    </div>
+    """, unsafe_allow_html=True)
+
 st.markdown("---")
 
 # ===== SIDEBAR =====
 st.sidebar.header("📊 Model Information")
-st.sidebar.markdown(f"""
-**Model:** {metadata['model_name']}  
-**R² Score:** {metadata['metrics']['test_r2']:.4f}  
-**RMSE:** ${metadata['metrics']['test_rmse']:,.2f}  
-**MAE:** ${metadata['metrics']['test_mae']:,.2f}
-""")
+
+# Display model metrics
+if model_type == "tuned":
+    st.sidebar.markdown(f"""
+    **Model:** {metadata.get('model_name', 'Tuned XGBoost')}  
+    **Tuning Method:** {metadata.get('tuning_method', 'RandomizedSearchCV')}  
+    **R² Score:** {metadata['metrics']['test_r2']:.4f}  
+    **RMSE:** ${metadata['metrics']['test_rmse']:,.2f}  
+    **MAE:** ${metadata['metrics']['test_mae']:,.2f}
+    """)
+    
+    # Show improvement over baseline
+    if 'baseline_metrics' in metadata:
+        st.sidebar.markdown("---")
+        st.sidebar.markdown("**📈 vs Baseline:**")
+        baseline_r2 = metadata['baseline_metrics']['test_r2']
+        improvement = ((metadata['metrics']['test_r2'] - baseline_r2) / baseline_r2) * 100
+        st.sidebar.metric("R² Improvement", f"+{improvement:.2f}%")
+else:
+    st.sidebar.markdown(f"""
+    **Model:** {metadata['model_name']}  
+    **R² Score:** {metadata['metrics']['test_r2']:.4f}  
+    **RMSE:** ${metadata['metrics']['test_rmse']:,.2f}  
+    **MAE:** ${metadata['metrics']['test_mae']:,.2f}
+    """)
 
 st.sidebar.markdown("---")
 st.sidebar.info("""
@@ -111,7 +170,7 @@ st.sidebar.info("""
 
 # ===== MAIN CONTENT =====
 # Create tabs
-tab1, tab2, tab3 = st.tabs(["🎯 Prediction", "📈 Model Performance", "ℹ️ About"])
+tab1, tab2, tab3, tab4 = st.tabs(["🎯 Prediction", "📈 Model Performance", "🔍 Explainability", "ℹ️ About"])
 
 with tab1:
     st.header("Enter Car Details")
@@ -244,9 +303,10 @@ with tab1:
                 st.plotly_chart(fig, use_container_width=True)
                 
                 # Interpretation
+                model_name = metadata.get('model_name', 'XGBoost')
                 st.info(f"""
                 **💡 Interpretation:**  
-                Based on the {metadata['model_name']}, we predict this car's price to be **${prediction:,.2f}**.  
+                Based on the {model_name}, we predict this car's price to be **${prediction:,.2f}**.  
                 With 95% confidence, the actual price should fall between **${confidence_lower:,.2f}** and **${confidence_upper:,.2f}**.  
                 This model explains **{metadata['metrics']['test_r2']*100:.1f}%** of price variation in our dataset.
                 """)
@@ -278,6 +338,16 @@ with tab2:
     
     st.markdown("---")
     
+    # Show hyperparameter tuning results if available
+    if model_type == "tuned" and 'best_params' in metadata:
+        st.subheader("🔧 Optimized Hyperparameters")
+        
+        params_df = pd.DataFrame([metadata['best_params']]).T
+        params_df.columns = ['Value']
+        st.dataframe(params_df, use_container_width=True)
+    
+    st.markdown("---")
+    
     # Model comparison chart (if available)
     st.subheader("📊 Performance Visualization")
     
@@ -296,6 +366,66 @@ with tab2:
         st.info("Run `02_modeling.ipynb` to generate feature importance visualization.")
 
 with tab3:
+    st.header("🔍 Model Explainability (SHAP)")
+    
+    st.markdown("""
+    SHAP (SHapley Additive exPlanations) values show how each feature contributes to individual predictions,
+    making the model's decisions transparent and interpretable.
+    """)
+    
+    # Check if SHAP visualizations exist
+    shap_dir = Path('visualizations/shap')
+    
+    if shap_dir.exists():
+        # SHAP Summary Plot
+        if (shap_dir / 'shap_summary.png').exists():
+            st.subheader("📊 Global Feature Impact")
+            st.image(str(shap_dir / 'shap_summary.png'), 
+                    caption='SHAP Summary Plot - How features impact predictions globally',
+                    use_container_width=True)
+        
+        # SHAP Feature Importance
+        if (shap_dir / 'shap_importance.png').exists():
+            st.subheader("🎯 Feature Importance Ranking")
+            st.image(str(shap_dir / 'shap_importance.png'),
+                    caption='Mean absolute SHAP values - Feature importance',
+                    use_container_width=True)
+        
+        # SHAP Waterfall
+        if (shap_dir / 'shap_waterfall.png').exists():
+            st.subheader("💧 Individual Prediction Breakdown")
+            st.image(str(shap_dir / 'shap_waterfall.png'),
+                    caption='SHAP Waterfall Plot - How features contributed to a single prediction',
+                    use_container_width=True)
+        
+        # SHAP Dependence Plots
+        dependence_plots = list(shap_dir.glob('shap_dependence_*.png'))
+        if dependence_plots:
+            st.subheader("🔗 Feature Interaction Analysis")
+            for plot_path in dependence_plots[:3]:  # Show max 3
+                st.image(str(plot_path),
+                        caption=f'Feature interaction: {plot_path.stem.replace("shap_dependence_", "").replace("_", " ")}',
+                        use_container_width=True)
+    else:
+        st.info("""
+        **SHAP visualizations not yet generated.**
+        
+        Run `notebooks/03_advanced_features.ipynb` to generate:
+        - Global feature importance
+        - Individual prediction explanations
+        - Feature interaction analysis
+        """)
+        
+        st.markdown("""
+        ### Why SHAP Matters:
+        
+        - **🎯 Transparency:** Understand exactly why the model made a prediction
+        - **🔍 Trust:** Identify if the model is using reasonable patterns
+        - **⚖️ Fairness:** Detect potential biases in predictions
+        - **📊 Insights:** Discover which features matter most for pricing
+        """)
+
+with tab4:
     st.header("ℹ️ About This Project")
     
     st.markdown("""
@@ -306,25 +436,46 @@ with tab3:
     ### 🛠️ Technology Stack
     - **Frontend:** Streamlit
     - **ML Models:** Linear Regression, Random Forest, XGBoost
+    - **Hyperparameter Tuning:** RandomizedSearchCV / GridSearchCV
+    - **Model Explainability:** SHAP (SHapley Additive exPlanations)
     - **Data Processing:** Pandas, NumPy, Scikit-learn
     - **Visualization:** Plotly, Matplotlib, Seaborn
     
     ### 📊 Model Selection
     The system automatically selects the best-performing model based on R² score on test data.
-    Current deployed model: **{model_name}**
+    """)
     
+    if model_type == "tuned":
+        st.markdown(f"""
+        **Current deployed model:** {metadata.get('model_name', 'Tuned XGBoost')}  
+        **Performance:** {metadata['metrics']['test_r2']:.4f} R² Score  
+        **Optimization:** Hyperparameter-tuned for optimal performance
+        """)
+    else:
+        st.markdown(f"""
+        **Current deployed model:** {metadata['model_name']}  
+        **Performance:** {metadata['metrics']['test_r2']:.4f} R² Score
+        """)
+    
+    st.markdown("""
     ### 🎓 Use Cases
     - Car dealerships for pricing optimization
     - Individual sellers for market value estimation
     - Buyers for fair price validation
     - Market trend analysis
     
+    ### ✨ Advanced Features
+    - ⚡ **Hyperparameter Tuning:** Automated optimization for best performance
+    - 🔍 **SHAP Explainability:** Understand why predictions are made
+    - 📊 **Interactive Visualizations:** Explore model insights visually
+    - 🎯 **Confidence Intervals:** Know the prediction uncertainty
+    
     ### 👨‍💻 Developer
     Created as part of Data Science internship training.
     
     ### 📧 Contact
     For questions or feedback, please reach out via GitHub.
-    """.format(model_name=metadata['model_name']))
+    """)
 
 # Footer
 st.markdown("---")

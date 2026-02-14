@@ -159,6 +159,23 @@ pip install -r requirements.txt
 # Dataset will be automatically downloaded when running notebooks
 ```
 
+## 🌐 Live Demo
+
+< align="center">
+
+### 🎯 **[Try the Live Application →](https://mydailywork-task4.streamlit.app/)**
+
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://mydailywork-task4.streamlit.app/)
+
+**Predict car prices in real-time • Explore model insights • See SHAP explanations**
+
+**Features Available:**
+- 🔮 Real-time price predictions with confidence intervals
+- ⚡ Hyperparameter-optimized XGBoost model
+- 🔍 SHAP explainability for transparent AI decisions
+- 📊 Interactive performance visualizations
+- 📈 Feature importance analysis
+
 ---
 
 ## 💻 Usage
@@ -388,6 +405,19 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - SHAP Library: [Scott Lundberg et al.](https://github.com/slundberg/shap)
 - Inspiration: Real-world pricing inefficiencies in automotive market
 - Mentorship: [Internship Program Name]
+
+---
+
+## 🎓 Project Highlights
+
+✅ **Live Production Deployment:** [https://mydailywork-task4.streamlit.app/](https://mydailywork-task4.streamlit.app/)  
+✅ **End-to-End ML Pipeline:** From data acquisition to deployment  
+✅ **Hyperparameter Optimization:** 2.6% performance improvement  
+✅ **Model Explainability:** SHAP integration for transparent AI  
+✅ **Professional UI:** Streamlit dashboard with interactive visualizations  
+✅ **Production-Ready Code:** Modular architecture with best practices  
+✅ **Comprehensive Documentation:** README + deployment guides  
+✅ **Version Control:** Git workflow with meaningful commits  
 
 ---
 
