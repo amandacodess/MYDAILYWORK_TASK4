@@ -351,7 +351,7 @@ For a $25,000 prediction:
 
 ## 👨‍💻 Author
 
-**[Your Name]**  
+**[Amanda Caroline Young]**  
 Data Science Intern | Machine Learning Enthusiast
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://https://www.linkedin.com/in/amanda-caroline-young-168141266/)
