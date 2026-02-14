@@ -301,19 +301,6 @@ For a $25,000 prediction:
 ```
 
 ---
-
-## 🌐 Deployment
-
-### Option 1: Streamlit Cloud (Recommended for ML Apps)
-
-**Advantages:**
-- ✅ Free tier available
-- ✅ Auto-deployment from GitHub
-- ✅ Built-in ML library support
-- ✅ Easy updates via git push
-
----
-
 ## 🎯 Key Features
 
 ### For Users
