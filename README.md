@@ -178,36 +178,6 @@ pip install -r requirements.txt
 
 ---
 
-## 💻 Usage
-
-### 1. Data Processing & Model Training
-```bash
-# Open Jupyter Notebook
-jupyter notebook
-
-# Run notebooks in order:
-# 1. notebooks/01_eda.ipynb - Exploratory analysis
-# 2. notebooks/02_modeling.ipynb - Baseline model training
-# 3. notebooks/03_advanced_features.ipynb - Tuning & SHAP (NEW)
-```
-
-### 2. Launch Web Application
-```bash
-# Start Streamlit app
-streamlit run app.py
-
-# App will open at http://localhost:8501
-```
-
-### 3. Making Predictions
-
-1. Open the Streamlit interface
-2. Enter car specifications (year, mileage, engine size, etc.)
-3. Click "Predict Price"
-4. View AI-generated price estimate with confidence interval
-
----
-
 ## 📊 Model Performance
 
 ### Comparison of Algorithms
