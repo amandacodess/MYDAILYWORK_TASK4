@@ -61,8 +61,15 @@ def load_artifacts():
         
         return model, scaler, encoders, metadata
     
-    except FileNotFoundError:
+    except FileNotFoundError as e:
         st.error("⚠️ Model files not found! Please train the model first.")
+        st.info("""
+        **Steps to fix:**
+        1. Open Jupyter Notebook: `jupyter notebook`
+        2. Run `notebooks/01_eda.ipynb` completely
+        3. Run `notebooks/02_modeling.ipynb` completely
+        4. This will create the required model files in `models/` directory
+        """)
         st.stop()
 
 model, scaler, encoders, metadata = load_artifacts()
@@ -75,13 +82,14 @@ def load_sample_data():
         df = pd.read_csv('data/processed/car_sales_clean.csv')
         return df
     except FileNotFoundError:
+        st.warning("⚠️ Processed data not found. Run 01_eda.ipynb first.")
         return None
 
 sample_data = load_sample_data()
 
 # ===== HEADER =====
 st.title("🚗 Car Sales Price Prediction System")
-st.markdown("### AI-Powered Vehicle Pricing Tool")
+st.markdown("### Machine Learning Vehicle Pricing Tool")
 st.markdown("---")
 
 # ===== SIDEBAR =====
@@ -98,7 +106,7 @@ st.sidebar.info("""
 💡 **How to Use:**
 1. Enter car features in the form
 2. Click 'Predict Price'
-3. View AI prediction with confidence interval
+3. View prediction with confidence interval
 """)
 
 # ===== MAIN CONTENT =====
@@ -161,89 +169,94 @@ with tab1:
         
         # Prediction button
         if st.button("🔮 Predict Price", type="primary", use_container_width=True):
-            # Prepare input
-            input_df = pd.DataFrame([user_input])
-            
-            # Encode categorical variables
-            for col in categorical_features:
-                if col in encoders:
-                    input_df[col] = encoders[col].transform(input_df[col])
-            
-            # Ensure correct feature order
-            feature_order = scaler.feature_names_in_ if hasattr(scaler, 'feature_names_in_') else list(user_input.keys())
-            input_df = input_df[feature_order]
-            
-            # Scale features
-            input_scaled = scaler.transform(input_df)
-            
-            # Predict
-            prediction = model.predict(input_scaled)[0]
-            
-            # Calculate confidence interval (using RMSE as std)
-            rmse = metadata['metrics']['test_rmse']
-            confidence_lower = prediction - (1.96 * rmse)
-            confidence_upper = prediction + (1.96 * rmse)
-            
-            # Display results
-            st.markdown("## 🎉 Prediction Results")
-            
-            col1, col2, col3 = st.columns(3)
-            
-            with col1:
-                st.markdown(f"""
-                <div class="metric-card">
-                    <h3>Predicted Price</h3>
-                    <h1>${prediction:,.2f}</h1>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            with col2:
-                st.metric("Lower Bound (95% CI)", f"${confidence_lower:,.2f}")
-            
-            with col3:
-                st.metric("Upper Bound (95% CI)", f"${confidence_upper:,.2f}")
-            
-            # Confidence gauge
-            st.markdown("### 📊 Prediction Confidence")
-            
-            fig = go.Figure(go.Indicator(
-                mode="gauge+number+delta",
-                value=metadata['metrics']['test_r2'] * 100,
-                domain={'x': [0, 1], 'y': [0, 1]},
-                title={'text': "Model Confidence (R² Score)", 'font': {'size': 24}},
-                delta={'reference': 80, 'increasing': {'color': "green"}},
-                gauge={
-                    'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': "darkblue"},
-                    'bar': {'color': "darkblue"},
-                    'bgcolor': "white",
-                    'borderwidth': 2,
-                    'bordercolor': "gray",
-                    'steps': [
-                        {'range': [0, 50], 'color': '#FFE5E5'},
-                        {'range': [50, 75], 'color': '#FFF4E5'},
-                        {'range': [75, 100], 'color': '#E5F5E5'}
-                    ],
-                    'threshold': {
-                        'line': {'color': "red", 'width': 4},
-                        'thickness': 0.75,
-                        'value': 90
+            try:
+                # Prepare input
+                input_df = pd.DataFrame([user_input])
+                
+                # Encode categorical variables
+                for col in categorical_features:
+                    if col in encoders:
+                        input_df[col] = encoders[col].transform(input_df[col])
+                
+                # Ensure correct feature order
+                feature_order = scaler.feature_names_in_ if hasattr(scaler, 'feature_names_in_') else list(user_input.keys())
+                input_df = input_df[feature_order]
+                
+                # Scale features
+                input_scaled = scaler.transform(input_df)
+                
+                # Predict
+                prediction = model.predict(input_scaled)[0]
+                
+                # Calculate confidence interval (using RMSE as std)
+                rmse = metadata['metrics']['test_rmse']
+                confidence_lower = prediction - (1.96 * rmse)
+                confidence_upper = prediction + (1.96 * rmse)
+                
+                # Display results
+                st.markdown("## 🎉 Prediction Results")
+                
+                col1, col2, col3 = st.columns(3)
+                
+                with col1:
+                    st.markdown(f"""
+                    <div class="metric-card">
+                        <h3>Predicted Price</h3>
+                        <h1>${prediction:,.2f}</h1>
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                with col2:
+                    st.metric("Lower Bound (95% CI)", f"${confidence_lower:,.2f}")
+                
+                with col3:
+                    st.metric("Upper Bound (95% CI)", f"${confidence_upper:,.2f}")
+                
+                # Confidence gauge
+                st.markdown("### 📊 Prediction Confidence")
+                
+                fig = go.Figure(go.Indicator(
+                    mode="gauge+number+delta",
+                    value=metadata['metrics']['test_r2'] * 100,
+                    domain={'x': [0, 1], 'y': [0, 1]},
+                    title={'text': "Model Confidence (R² Score)", 'font': {'size': 24}},
+                    delta={'reference': 80, 'increasing': {'color': "green"}},
+                    gauge={
+                        'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': "darkblue"},
+                        'bar': {'color': "darkblue"},
+                        'bgcolor': "white",
+                        'borderwidth': 2,
+                        'bordercolor': "gray",
+                        'steps': [
+                            {'range': [0, 50], 'color': '#FFE5E5'},
+                            {'range': [50, 75], 'color': '#FFF4E5'},
+                            {'range': [75, 100], 'color': '#E5F5E5'}
+                        ],
+                        'threshold': {
+                            'line': {'color': "red", 'width': 4},
+                            'thickness': 0.75,
+                            'value': 90
+                        }
                     }
-                }
-            ))
+                ))
+                
+                fig.update_layout(height=300)
+                st.plotly_chart(fig, use_container_width=True)
+                
+                # Interpretation
+                st.info(f"""
+                **💡 Interpretation:**  
+                Based on the {metadata['model_name']}, we predict this car's price to be **${prediction:,.2f}**.  
+                With 95% confidence, the actual price should fall between **${confidence_lower:,.2f}** and **${confidence_upper:,.2f}**.  
+                This model explains **{metadata['metrics']['test_r2']*100:.1f}%** of price variation in our dataset.
+                """)
             
-            fig.update_layout(height=300)
-            st.plotly_chart(fig, use_container_width=True)
-            
-            # Interpretation
-            st.info(f"""
-            **💡 Interpretation:**  
-            Based on the {metadata['model_name']}, we predict this car's price to be **${prediction:,.2f}**.  
-            With 95% confidence, the actual price should fall between **${confidence_lower:,.2f}** and **${confidence_upper:,.2f}**.  
-            This model explains **{metadata['metrics']['test_r2']*100:.1f}%** of price variation in our dataset.
-            """)
+            except Exception as e:
+                st.error(f"❌ Prediction Error: {str(e)}")
+                st.info("Please check that all inputs are valid and try again.")
     
     else:
-        st.warning("⚠️ Sample data not available. Using manual input mode.")
+        st.warning("⚠️ Sample data not available. Please run `01_eda.ipynb` to generate processed data.")
 
 with tab2:
     st.header("📈 Model Performance Metrics")
@@ -272,18 +285,22 @@ with tab2:
         st.image('visualizations/model_comparison.png', 
                 caption='Model Performance Comparison', 
                 use_container_width=True)
+    else:
+        st.info("Run `02_modeling.ipynb` to generate model comparison visualization.")
     
     if Path('visualizations/feature_importance.png').exists():
         st.image('visualizations/feature_importance.png', 
                 caption='Feature Importance Analysis', 
                 use_container_width=True)
+    else:
+        st.info("Run `02_modeling.ipynb` to generate feature importance visualization.")
 
 with tab3:
     st.header("ℹ️ About This Project")
     
     st.markdown("""
     ### 🎯 Project Overview
-    This is an AI-powered car price prediction system built using machine learning regression models.
+    This is a car price prediction system built using machine learning regression models.
     The system analyzes various car features to estimate market value.
     
     ### 🛠️ Technology Stack
