@@ -6,6 +6,39 @@ from pathlib import Path
 import plotly.graph_objects as go
 import plotly.express as px
 
+from PIL import Image
+
+def display_image_fixed_size(image_path, caption, max_width=800, max_height=600):
+    """
+    Display image with fixed maximum dimensions while maintaining aspect ratio
+    
+    Args:
+        image_path: Path to the image file
+        caption: Caption text for the image
+        max_width: Maximum width in pixels
+        max_height: Maximum height in pixels
+    """
+    if Path(image_path).exists():
+        img = Image.open(image_path)
+        
+        # Calculate aspect ratio
+        aspect_ratio = img.width / img.height
+        
+        # Resize if needed
+        if img.width > max_width or img.height > max_height:
+            if aspect_ratio > 1:  # Wider than tall
+                new_width = min(img.width, max_width)
+                new_height = int(new_width / aspect_ratio)
+            else:  # Taller than wide
+                new_height = min(img.height, max_height)
+                new_width = int(new_height * aspect_ratio)
+            
+            img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+        
+        st.image(img, caption=caption, use_column_width=False)
+        return True
+    return False
+
 # Page configuration
 st.set_page_config(
     page_title="Car Sales Price Predictor",
@@ -14,6 +47,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Custom CSS for better UI
 # Custom CSS for better UI
 st.markdown("""
     <style>
@@ -47,6 +81,26 @@ st.markdown("""
         font-weight: bold;
         display: inline-block;
         margin: 0.5rem 0;
+    }
+    
+    /* Fixed image sizing */
+    .stImage {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    /* Center images */
+    .stImage > img {
+        display: block;
+        margin: 0 auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Specific sizing for large images */
+    .stImage[data-testid="stImage"] img {
+        max-height: 600px;
+        object-fit: contain;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -351,19 +405,28 @@ with tab2:
     # Model comparison chart (if available)
     st.subheader("📊 Performance Visualization")
     
-    if Path('visualizations/model_comparison.png').exists():
-        st.image('visualizations/model_comparison.png', 
-                caption='Model Performance Comparison', 
-                use_container_width=True)
-    else:
-        st.info("Run `02_modeling.ipynb` to generate model comparison visualization.")
+    # Create two columns for side-by-side images
+    col1, col2 = st.columns(2)
     
-    if Path('visualizations/feature_importance.png').exists():
-        st.image('visualizations/feature_importance.png', 
-                caption='Feature Importance Analysis', 
-                use_container_width=True)
-    else:
-        st.info("Run `02_modeling.ipynb` to generate feature importance visualization.")
+    with col1:
+        if Path('visualizations/model_comparison.png').exists():
+            from PIL import Image
+            img = Image.open('visualizations/model_comparison.png')
+            st.image(img, 
+                    caption='Model Performance Comparison',
+                    use_column_width=True)  # Uses column width
+        else:
+            st.info("📊 Run `02_modeling.ipynb` to generate model comparison visualization.")
+    
+    with col2:
+        if Path('visualizations/feature_importance.png').exists():
+            from PIL import Image
+            img = Image.open('visualizations/feature_importance.png')
+            st.image(img, 
+                    caption='Feature Importance Analysis',
+                    use_column_width=True)  # Uses column width
+        else:
+            st.info("📊 Run `02_modeling.ipynb` to generate feature importance visualization.")
 
 with tab3:
     st.header("🔍 Model Explainability (SHAP)")
@@ -376,36 +439,73 @@ with tab3:
     # Check if SHAP visualizations exist
     shap_dir = Path('visualizations/shap')
     
-    if shap_dir.exists():
-        # SHAP Summary Plot
+    if shap_dir.exists() and any(shap_dir.glob('*.png')):
+        # SHAP Summary Plot - Full Width
         if (shap_dir / 'shap_summary.png').exists():
             st.subheader("📊 Global Feature Impact")
-            st.image(str(shap_dir / 'shap_summary.png'), 
+            from PIL import Image
+            img = Image.open(str(shap_dir / 'shap_summary.png'))
+            
+            # Resize to fixed width while maintaining aspect ratio
+            max_width = 1000
+            if img.width > max_width:
+                ratio = max_width / img.width
+                new_height = int(img.height * ratio)
+                img = img.resize((max_width, new_height), Image.Resampling.LANCZOS)
+            
+            st.image(img, 
                     caption='SHAP Summary Plot - How features impact predictions globally',
-                    use_container_width=True)
+                    use_column_width=False,  # Don't stretch
+                    width=max_width)
+            
+            st.markdown("---")
         
-        # SHAP Feature Importance
-        if (shap_dir / 'shap_importance.png').exists():
-            st.subheader("🎯 Feature Importance Ranking")
-            st.image(str(shap_dir / 'shap_importance.png'),
-                    caption='Mean absolute SHAP values - Feature importance',
-                    use_container_width=True)
+        # SHAP Feature Importance and Waterfall - Side by Side
+        col1, col2 = st.columns(2)
         
-        # SHAP Waterfall
-        if (shap_dir / 'shap_waterfall.png').exists():
-            st.subheader("💧 Individual Prediction Breakdown")
-            st.image(str(shap_dir / 'shap_waterfall.png'),
-                    caption='SHAP Waterfall Plot - How features contributed to a single prediction',
-                    use_container_width=True)
+        with col1:
+            if (shap_dir / 'shap_importance.png').exists():
+                st.subheader("🎯 Feature Ranking")
+                img = Image.open(str(shap_dir / 'shap_importance.png'))
+                st.image(img,
+                        caption='Mean absolute SHAP values',
+                        use_column_width=True)
         
-        # SHAP Dependence Plots
-        dependence_plots = list(shap_dir.glob('shap_dependence_*.png'))
+        with col2:
+            if (shap_dir / 'shap_waterfall.png').exists():
+                st.subheader("💧 Prediction Breakdown")
+                img = Image.open(str(shap_dir / 'shap_waterfall.png'))
+                st.image(img,
+                        caption='Individual prediction explanation',
+                        use_column_width=True)
+        
+        st.markdown("---")
+        
+        # SHAP Dependence Plots - Grid Layout
+        dependence_plots = sorted(list(shap_dir.glob('shap_dependence_*.png')))
         if dependence_plots:
             st.subheader("🔗 Feature Interaction Analysis")
-            for plot_path in dependence_plots[:3]:  # Show max 3
-                st.image(str(plot_path),
-                        caption=f'Feature interaction: {plot_path.stem.replace("shap_dependence_", "").replace("_", " ")}',
-                        use_container_width=True)
+            
+            # Display in rows of 2
+            for i in range(0, min(len(dependence_plots), 6), 2):  # Max 6 plots, 2 per row
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    if i < len(dependence_plots):
+                        img = Image.open(str(dependence_plots[i]))
+                        feature_name = dependence_plots[i].stem.replace('shap_dependence_', '').replace('_', ' ').title()
+                        st.image(img,
+                                caption=f'Dependence: {feature_name}',
+                                use_column_width=True)
+                
+                with col2:
+                    if i + 1 < len(dependence_plots):
+                        img = Image.open(str(dependence_plots[i + 1]))
+                        feature_name = dependence_plots[i + 1].stem.replace('shap_dependence_', '').replace('_', ' ').title()
+                        st.image(img,
+                                caption=f'Dependence: {feature_name}',
+                                use_column_width=True)
+    
     else:
         st.info("""
         **SHAP visualizations not yet generated.**
