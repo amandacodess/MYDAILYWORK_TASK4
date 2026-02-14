@@ -43,7 +43,7 @@ In the used car market, pricing is often subjective and inconsistent. Dealers st
 
 ## 💡 Solution Approach
 
-This project builds an **AI-powered price prediction system** that:
+This project builds an **Sale Price Prediction System** that:
 
 1. **Analyzes** historical car sales data with 20+ features
 2. **Engineers** relevant features (depreciation, brand premium, mileage impact)
@@ -75,7 +75,7 @@ This project builds an **AI-powered price prediction system** that:
 
 ## 📁 Project Structure
 ```
-MyDailyWork_Task3/
+MyDlyWork_Task3/
 │
 ├── data/
 │   ├── raw/                    # Original datasets (not tracked)
@@ -83,15 +83,15 @@ MyDailyWork_Task3/
 │
 ├── notebooks/
 │   ├── 01_eda.ipynb           # Exploratory Data Analysis
-│   └── 02_modeling.ipynb      # Model training & evaluation
+│   └── 02_modeling.ipynb      # Model trning & evaluation
 │
 ├── src/
 │   ├── data_preprocessing.py  # Data cleaning pipeline
 │   ├── feature_engineering.py # Feature transformations
-│   └── model_training.py      # Model training logic
+│   └── model_trning.py      # Model trning logic
 │
 ├── models/
-│   ├── best_model.pkl         # Trained model artifact
+│   ├── best_model.pkl         # Trned model artifact
 │   ├── scaler.pkl             # Feature scaler
 │   └── label_encoders.pkl     # Categorical encoders
 │
@@ -118,8 +118,8 @@ MyDailyWork_Task3/
 ### Setup Instructions
 ```bash
 # 1. Clone the repository
-git clone https://github.com/YOUR-USERNAME/MyDailyWork_Task3.git
-cd MyDailyWork_Task3
+git clone https://github.com/YOUR-USERNAME/MyDlyWork_Task3.git
+cd MyDlyWork_Task3
 
 # 2. Create virtual environment (recommended)
 python -m venv venv
@@ -141,14 +141,14 @@ pip install -r requirements.txt
 
 ## 💻 Usage
 
-### 1. Data Processing & Model Training
+### 1. Data Processing & Model Trning
 ```bash
 # Open Jupyter Notebook
 jupyter notebook
 
 # Run notebooks in order:
 # 1. notebooks/01_eda.ipynb - Exploratory analysis
-# 2. notebooks/02_modeling.ipynb - Model training
+# 2. notebooks/02_modeling.ipynb - Model trning
 ```
 
 ### 2. Launch Web Application
@@ -164,7 +164,7 @@ streamlit run app.py
 1. Open the Streamlit interface
 2. Enter car specifications (year, mileage, engine size, etc.)
 3. Click "Predict Price"
-4. View AI-generated price estimate with confidence interval
+4. View -generated price estimate with confidence interval
 
 ---
 
@@ -172,7 +172,7 @@ streamlit run app.py
 
 ### Comparison of Algorithms
 
-| Model | R² Score | RMSE | MAE | Training Time |
+| Model | R² Score | RMSE | MAE | Trning Time |
 |-------|----------|------|-----|---------------|
 | Linear Regression | 0.7234 | $4,521 | $3,145 | 0.05s |
 | Random Forest | 0.8612 | $3,102 | $2,234 | 2.3s |
@@ -181,7 +181,7 @@ streamlit run app.py
 **Selected Model:** XGBoost Regressor
 
 **Rationale:**
-- ✅ Highest R² score (88.91% variance explained)
+- ✅ Highest R² score (88.91% variance explned)
 - ✅ Lowest prediction error (RMSE: $2,756)
 - ✅ Robust to outliers via gradient boosting
 - ✅ Handles non-linear feature interactions
@@ -206,7 +206,7 @@ Top 5 price drivers:
 - 🎨 **Clean UI:** Professional, responsive Streamlit interface
 
 ### For Developers
-- 🔧 **Modular Code:** Reusable preprocessing and training pipelines
+- 🔧 **Modular Code:** Reusable preprocessing and trning pipelines
 - 📓 **Reproducible:** Jupyter notebooks document entire workflow
 - 🧪 **Extensible:** Easy to add new models or features
 - 📦 **Production-Ready:** Pickle artifacts for deployment
@@ -226,18 +226,17 @@ Top 5 price drivers:
 
 ## 👨‍💻 Author
 
-**[Your Name]**  
+**[Amanda Caroline Young]**  
 Data Science Intern | Machine Learning Enthusiast
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://linkedin.com/in/yourprofile)
-[![GitHub](https://img.shields.io/badge/GitHub-Follow-black)](https://github.com/yourusername)
-[![Email](https://img.shields.io/badge/Email-Contact-red)](mailto:your.email@example.com)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://www.linkedin.com/in/amanda-caroline-young-168141266/)
+[![GitHub](https://img.shields.io/badge/GitHub-Follow-black)](https://github.com/amandacodess)
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for detls.
 
 ---
 
@@ -245,7 +244,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Dataset: [Kaggle - Car Sales Price Prediction](https://www.kaggle.com/datasets/yashpaloswal/ann-car-sales-price-prediction)
 - Inspiration: Real-world pricing inefficiencies in automotive market
-- Mentorship: [Internship Program Name]
 
 ---
 
@@ -253,7 +251,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
   
 **⭐ Star this repo if you found it helpful!**
 
-Made with ❤️ and ☕ by [Your Name]
+Made with ❤️ and ☕ by [Amanda Caroline Young]
 
 </div>
 ```
