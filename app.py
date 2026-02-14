@@ -89,6 +89,85 @@ st.markdown("""
         border: 2px solid rgba(255, 255, 255, 0.6) !important;
     }
     
+    /* === FIX INPUT FIELDS === */
+    /* Number Input Fields - Light pink background with black text */
+    .stNumberInput > div > div > input {
+        background-color: #FFF5F8 !important;
+        color: #000000 !important;
+        border: 2px solid #FFB6C1 !important;
+        border-radius: 8px !important;
+        padding: 10px !important;
+        font-weight: 500 !important;
+    }
+    
+    .stNumberInput > div > div > input:focus {
+        background-color: #FFFFFF !important;
+        border-color: #FF69B4 !important;
+        box-shadow: 0 0 0 2px rgba(255, 105, 180, 0.2) !important;
+    }
+    
+    /* Number Input Buttons (+ and -) */
+    .stNumberInput button {
+        background-color: #FFB6C1 !important;
+        color: #000000 !important;
+        border: none !important;
+        border-radius: 5px !important;
+    }
+    
+    .stNumberInput button:hover {
+        background-color: #FF69B4 !important;
+        color: white !important;
+    }
+    
+    /* Text Input Fields */
+    .stTextInput > div > div > input {
+        background-color: #FFF5F8 !important;
+        color: #000000 !important;
+        border: 2px solid #FFB6C1 !important;
+        border-radius: 8px !important;
+        padding: 10px !important;
+    }
+    
+    .stTextInput > div > div > input:focus {
+        background-color: #FFFFFF !important;
+        border-color: #FF69B4 !important;
+        box-shadow: 0 0 0 2px rgba(255, 105, 180, 0.2) !important;
+    }
+    
+    /* Select Boxes (Dropdowns) */
+    .stSelectbox > div > div {
+        background-color: #FFF5F8 !important;
+        color: #000000 !important;
+        border: 2px solid #FFB6C1 !important;
+        border-radius: 8px !important;
+    }
+    
+    .stSelectbox [data-baseweb="select"] > div {
+        background-color: #FFF5F8 !important;
+        color: #000000 !important;
+    }
+    
+    /* Dropdown menu items */
+    [data-baseweb="menu"] {
+        background-color: #FFFFFF !important;
+    }
+    
+    [data-baseweb="menu"] li {
+        background-color: #FFFFFF !important;
+        color: #000000 !important;
+    }
+    
+    [data-baseweb="menu"] li:hover {
+        background-color: #FFF5F8 !important;
+    }
+    
+    /* Input Labels */
+    .stNumberInput label, .stTextInput label, .stSelectbox label {
+        color: #000000 !important;
+        font-weight: 600 !important;
+        margin-bottom: 5px !important;
+    }
+    
     /* Pink slider */
     .stSlider > div > div > div {
         background-color: #FF69B4 !important;
@@ -107,23 +186,6 @@ st.markdown("""
     /* Slider track */
     .stSlider > div > div > div {
         background: rgba(255, 182, 193, 0.3) !important;
-    }
-    
-    /* Input boxes */
-    .stSelectbox > div > div, .stNumberInput > div > div > input {
-        background-color: rgba(255, 240, 245, 0.5) !important;
-        color: #000000 !important;
-        border: 1px solid rgba(255, 182, 193, 0.5) !important;
-    }
-    
-    /* Dropdown text */
-    .stSelectbox [data-baseweb="select"] > div {
-        color: #000000 !important;
-    }
-    
-    /* Number input */
-    .stNumberInput input {
-        color: #000000 !important;
     }
     
     /* Metrics */
@@ -153,11 +215,7 @@ st.markdown("""
         color: #000000 !important;
     }
     
-    .stSuccess * {
-        color: #000000 !important;
-    }
-    
-    .stError * {
+    .stSuccess *, .stError * {
         color: #000000 !important;
     }
     
@@ -208,6 +266,8 @@ st.markdown("""
         color: #000000 !important;
         border-radius: 8px;
         border: 2px solid #FFB6C1;
+        padding: 10px 20px;
+        font-weight: 600;
     }
     
     .stTabs [aria-selected="true"] {
@@ -275,6 +335,13 @@ st.markdown("""
         color: #C71585 !important;
         padding: 2px 6px;
         border-radius: 4px;
+    }
+    
+    /* Plotly charts background */
+    .js-plotly-plot {
+        background-color: rgba(255, 255, 255, 0.9) !important;
+        border-radius: 10px;
+        padding: 10px;
     }
 </style>
 """, unsafe_allow_html=True)
