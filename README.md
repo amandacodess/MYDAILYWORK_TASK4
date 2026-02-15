@@ -3,93 +3,138 @@
 
 # Car Sales Price Prediction Using Machine Learning
 
-An end-to-end machine learning system for predicting used car prices using feature engineering, hyperparameter tuning, model evaluation, and explainability techniques. The final model is deployed as an interactive web application.
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.29.0-red.svg)](https://streamlit.io/)
+[![XGBoost](https://img.shields.io/badge/XGBoost-2.0.3-orange.svg)](https://xgboost.ai/)
+[![SHAP](https://img.shields.io/badge/SHAP-0.44.0-green.svg)](https://shap.readthedocs.io/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+An end-to-end machine learning system for predicting used car prices using feature engineering, hyperparameter tuning, model evaluation, and model explainability techniques. The final model is deployed as an interactive web application.
+
+![Project Banner](visualizations/model_comparison.png)
 
 ---
 
-## 1. Business Problem
+## Table of Contents
 
-Pricing in the used car market is often inconsistent and subjective. Dealers risk revenue loss from underpricing, while buyers lack transparency in valuation.
+* Business Problem
+* Solution Approach
+* Tech Stack
+* Project Structure
+* Installation
+* Live Demo
+* Model Development
+* Data Assumptions and Leakage Prevention
+* Error Analysis and Limitations
+* Model Explainability
+* Deployment
+* Future Improvements
+* Author
 
-This project develops a data-driven price prediction model to:
+---
+
+## Business Problem
+
+In the used car market, pricing is often subjective and inconsistent. Dealers risk revenue loss from underpricing, while buyers lack transparency in valuation.
+
+This project builds a data-driven pricing model to:
 
 * Reduce pricing error
 * Improve valuation consistency
 * Provide interpretable predictions
-* Enable real-time price estimation through a web interface
+* Enable real-time price estimation
 
 ---
 
-## 2. Solution Overview
+## Solution Approach
 
 The system:
 
-* Processes historical car sales data with 20+ features
-* Engineers domain-relevant features (depreciation, mileage effects, brand influence)
-* Compares multiple regression models
-* Applies hyperparameter tuning using cross-validation
-* Uses SHAP for model explainability
-* Deploys the best-performing model through a Streamlit application
+1. Processes historical car sales data with 20+ features
+2. Engineers domain-relevant features (depreciation effects, brand premium, mileage impact)
+3. Compares multiple regression models
+4. Applies hyperparameter tuning with cross-validation
+5. Uses SHAP for explainability
+6. Deploys the best-performing model through a Streamlit application
 
 ---
 
-## 3. Tech Stack
+## Tech Stack
 
-**Language:** Python 3.8+
-**Data Processing:** Pandas, NumPy
-**Machine Learning:** Scikit-learn, XGBoost
-**Hyperparameter Tuning:** RandomizedSearchCV, GridSearchCV
-**Explainability:** SHAP
-**Visualization:** Matplotlib, Seaborn, Plotly
-**Web Framework:** Streamlit
-**Deployment:** Streamlit Cloud / Heroku
-**Version Control:** Git, GitHub
+| Category              | Technologies                     |
+| --------------------- | -------------------------------- |
+| Language              | Python 3.8+                      |
+| Data Processing       | Pandas, NumPy                    |
+| Machine Learning      | Scikit-learn, XGBoost            |
+| Hyperparameter Tuning | GridSearchCV, RandomizedSearchCV |
+| Model Explainability  | SHAP                             |
+| Visualization         | Matplotlib, Seaborn, Plotly      |
+| Web Framework         | Streamlit                        |
+| Deployment            | Streamlit Cloud, Heroku          |
+| Version Control       | Git, GitHub                      |
+| Data Source           | Kaggle                           |
 
 ---
 
-## 4. Project Structure
-
+## Project Structure
 ```
 MyDailyWork_Task4/
-
-data/
-    raw/
-    processed/
-
-notebooks/
-    01_eda.ipynb
-    02_modeling.ipynb
-    03_advanced_features.ipynb
-
-src/
-    data_preprocessing.py
-    feature_engineering.py
-    model_training.py
-    hyperparameter_tuning.py
-    model_explainability.py
-
-models/
-    best_model.pkl
-    tuned_xgboost.pkl
-    scaler.pkl
-    label_encoders.pkl
-    model_metadata.pkl
-    tuned_model_metadata.pkl
-
-visualizations/
-    shap/
-
-app.py
-requirements.txt
-Procfile
-setup.sh
-runtime.txt
-README.md
+│
+├── data/
+│   ├── raw/                           # Original datasets (not tracked)
+│   └── processed/                     # Cleaned data
+│
+├── notebooks/
+│   ├── 01_eda.ipynb                  # Exploratory Data Analysis
+│   ├── 02_modeling.ipynb             # Model training & evaluation
+│   └── 03_advanced_features.ipynb    # Hyperparameter tuning & SHAP
+│
+├── src/
+│   ├── data_preprocessing.py         # Data cleaning pipeline
+│   ├── feature_engineering.py        # Feature transformations
+│   ├── model_training.py             # Model training logic
+│   ├── hyperparameter_tuning.py      # Automated tuning (NEW)
+│   └── model_explainability.py       # SHAP analysis (NEW)
+│
+├── models/
+│   ├── best_model.pkl                # Baseline trained model
+│   ├── tuned_xgboost.pkl            # Hyperparameter-tuned model (NEW)
+│   ├── scaler.pkl                    # Feature scaler
+│   ├── label_encoders.pkl            # Categorical encoders
+│   ├── model_metadata.pkl            # Baseline metrics
+│   └── tuned_model_metadata.pkl     # Tuned model metrics (NEW)
+│
+├── visualizations/
+│   ├── correlation_heatmap.png
+│   ├── model_comparison.png
+│   ├── feature_importance.png
+│   └── shap/                         # SHAP visualizations (NEW)
+│       ├── shap_summary.png
+│       ├── shap_importance.png
+│       ├── shap_waterfall.png
+│       └── shap_dependence_*.png
+│
+├── app.py                            # Streamlit web application
+├── requirements.txt                  # Python dependencies
+├── Procfile                          # Heroku deployment (NEW)
+├── setup.sh                          # Streamlit config (NEW)
+├── runtime.txt                       # Python version (NEW)
+├── README.md                         # Project documentation
+└── .gitignore                        # Git ignore rules
 ```
 
 ---
 
-## 5. Data Assumptions and Leakage Prevention
+## Live Demo
+
+Application URL:
+[https://mydailywork-task4.streamlit.app/](https://mydailywork-task4.streamlit.app/)
+
+The deployed application allows real-time prediction, feature inspection, and SHAP-based explanation of individual predictions.
+
+---
+
+## Data Assumptions and Leakage Prevention
 
 ### Assumptions
 
@@ -108,7 +153,7 @@ Future improvement: implement time-based validation to better simulate real-worl
 
 ---
 
-## 6. Model Development
+## Model Development
 
 ### Models Evaluated
 
@@ -137,29 +182,29 @@ Hyperparameter-tuned XGBoost Regressor.
 * Built-in regularization to control overfitting
 * Efficient inference time
 
-From a business perspective, lower RMSE reduces pricing error and revenue leakage.
+From a business perspective, lower RMSE reduces pricing error and potential revenue leakage.
 
 ---
 
-## 7. Error Analysis and Limitations
+## Error Analysis and Limitations
 
 ### Observations
 
-* Slight underestimation for high-priced vehicles.
-* Higher variance in luxury brand predictions.
-* Best performance observed in mid-range price segment.
+* Slight underestimation for high-priced vehicles
+* Higher variance in luxury brand predictions
+* Best performance observed in mid-range price segment
 
 ### Limitations
 
-* No regional segmentation included.
-* No macroeconomic features (inflation, fuel prices).
-* Assumes stable depreciation trends across brands.
+* No regional segmentation included
+* No macroeconomic features (inflation, fuel prices)
+* Assumes stable depreciation trends across brands
 
 Future improvements may include segmented modeling or time-series adjustment.
 
 ---
 
-## 8. Model Explainability
+## Model Explainability
 
 SHAP (TreeExplainer) was used to:
 
@@ -175,11 +220,11 @@ Top features influencing price:
 * Mileage
 * Transmission type
 
-Explainability improves transparency and trust in model predictions.
+Explainability improves transparency and interpretability of model predictions.
 
 ---
 
-## 9. Deployment
+## Deployment
 
 The final model is deployed using Streamlit.
 
@@ -190,12 +235,12 @@ Features include:
 * Feature importance visualization
 * SHAP-based explanation for individual predictions
 
-Live Application:
+Live application:
 [https://mydailywork-task4.streamlit.app/](https://mydailywork-task4.streamlit.app/)
 
 ---
 
-## 10. Future Improvements
+## Future Improvements
 
 * Time-based cross-validation
 * Nested cross-validation
@@ -206,9 +251,12 @@ Live Application:
 
 ---
 
-## 11. Author
+## Author
 
 Amanda Caroline Young
 Data Science Intern | Machine Learning Enthusiast
+
+LinkedIn: [https://www.linkedin.com/in/amanda-caroline-young-168141266/](https://www.linkedin.com/in/amanda-caroline-young-168141266/)
+GitHub: [https://github.com/amandacodess](https://github.com/amandacodess)
 
 ---
