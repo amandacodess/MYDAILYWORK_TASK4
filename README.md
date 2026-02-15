@@ -1,9 +1,3 @@
-Good. That’s exactly the right instinct.
-
-We’re going to make this read like an engineer wrote it — not a marketing intern.
-
-Below is a cleaned, more technical version of your README.
-You can replace your current one with this structure.
 
 ---
 
