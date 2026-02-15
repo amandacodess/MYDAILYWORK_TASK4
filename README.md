@@ -257,6 +257,7 @@ Amanda Caroline Young
 Data Science Intern | Machine Learning Enthusiast
 
 LinkedIn: [https://www.linkedin.com/in/amanda-caroline-young-168141266/](https://www.linkedin.com/in/amanda-caroline-young-168141266/)
+
 GitHub: [https://github.com/amandacodess](https://github.com/amandacodess)
 
 ---
